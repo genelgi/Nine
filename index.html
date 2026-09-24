@@ -631,8 +631,12 @@ function fixGap(){
   if(standalone){
     const portrait=innerHeight>innerWidth;
     const sh=portrait?Math.max(screen.width,screen.height):Math.min(screen.width,screen.height);
-    gap=Math.round(sh-innerHeight);
-    if(gap<0||gap>120) gap=0;
+    const probe=document.createElement('div');
+    probe.style.cssText='position:fixed;top:0;left:0;width:1px;height:env(safe-area-inset-top,0px);visibility:hidden;pointer-events:none';
+    document.body.append(probe);
+    const top=probe.getBoundingClientRect().height; probe.remove();
+    gap=Math.round(sh-innerHeight-top);
+    if(gap<0||gap>100) gap=0;
   }
   document.documentElement.style.setProperty('--gap',gap+'px');
 }
